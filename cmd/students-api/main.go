@@ -13,13 +13,19 @@ import (
 
 	"github.com/callmeskyy111/golang-students-api/internal/config"
 	"github.com/callmeskyy111/golang-students-api/internal/http/handlers/student"
+	"github.com/callmeskyy111/golang-students-api/internal/storage/sqlite"
 )
 
 func main() {
 	// load config
 	cfg:= config.MustLoad()
 
-	// db setup // Later On..
+	// db setup
+	_,err:=sqlite.New(cfg)
+	if err!=nil{
+		log.Fatal(err)
+	}
+	slog.Info("storage initialised",slog.String("env",cfg.Env), slog.String("version","1.0.0"))
 	// setup router
 	router:=http.NewServeMux()
 	router.HandleFunc("POST /api/students",student.New())
@@ -58,3 +64,5 @@ func main() {
 }
 
 // go run cmd/students-api/main.go -config config/local.yaml
+
+// ⌛ 02:01:00
