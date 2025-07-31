@@ -57,4 +57,4 @@ func main() {
 	slog.Info("Server SHUTDOWN Successfully!")
 }
 
-// todo - 01:07:15 ⏳
+// go run cmd/students-api/main.go -config config/local.yaml
