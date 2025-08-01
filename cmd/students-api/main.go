@@ -21,14 +21,14 @@ func main() {
 	cfg:= config.MustLoad()
 
 	// db setup
-	_,err:=sqlite.New(cfg)
+	storage,err:=sqlite.New(cfg)
 	if err!=nil{
 		log.Fatal(err)
 	}
 	slog.Info("storage initialised",slog.String("env",cfg.Env), slog.String("version","1.0.0"))
 	// setup router
 	router:=http.NewServeMux()
-	router.HandleFunc("POST /api/students",student.New())
+	router.HandleFunc("POST /api/students",student.New(storage))
 	// setup server
 	server:=http.Server{
 		Addr: cfg.Addr,
@@ -65,4 +65,4 @@ func main() {
 
 // go run cmd/students-api/main.go -config config/local.yaml
 
-// ⌛ 02:01:00
+// 02.04

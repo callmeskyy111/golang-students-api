@@ -4,7 +4,7 @@ import (
 	"database/sql"
 
 	"github.com/callmeskyy111/golang-students-api/internal/config"
-	_"github.com/mattn/go-sqlite3"
+	_ "github.com/mattn/go-sqlite3"
 )
 
 type Sqlite struct {
@@ -33,5 +33,23 @@ if err!=nil{
 return &Sqlite{
 	Db: db,
 },nil
+}
 
+func(s *Sqlite) CreateStudent(name string, email string, age int) (int64, error){
+	stmt,err:=s.Db.Prepare("INSERT INTO students (name, email, age) VALUES(?, ?, ?)")
+	if err != nil{
+		return 0,err
+	}
+	defer stmt.Close()
+	result,err := stmt.Exec(name, email, age)
+	if err!=nil{
+		return 0,err
+	}
+
+	lastId,err:=result.LastInsertId()
+	if err!= nil{
+		return 0,err
+	}
+
+	return lastId, nil
 }
